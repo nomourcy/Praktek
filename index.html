@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koleksi eBook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="loader-content">
+            <svg class="book-icon" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-1-1 1V4zm9 16H6V4h1v9l3-3 3 3V4h2v16z"/></svg>
+            <p>Memuat Buku...</p>
+        </div>
+    </div>
+    
+    <div id="app-container">
+        <header id="main-header">
+            <div class="logo-container">
+                <img src="assets/logo-hitam.png" alt="Logo Aplikasi" class="logo logo-light">
+                <img src="assets/logo-putih.png" alt="Logo Aplikasi" class="logo logo-dark">
+            </div>
+            <nav class="category-tabs">
+                <ul></ul>
+            </nav>
+        </header>
+        
+        <main id="beranda-view" class="page-view">
+            <div id="banner-slider" class="banner-slider">
+                <div class="slides-container">
+                    </div>
+                <div class="slider-dots"></div>
+            </div>
+        </main>
+
+        <div id="koleksi-view" class="page-view hidden"></div>
+        <div id="discovery-view" class="page-view hidden"></div>
+        <div id="profil-view" class="page-view hidden">
+            <div class="page-header">
+                <h2>Profil & Pengaturan</h2>
+            </div>
+            <div class="profile-card">
+                <h3 class="card-title">Statistik Saya</h3>
+                <div class="stat-item">
+                    <i class="fas fa-bookmark"></i>
+                    <div class="stat-info">
+                        <span>Buku di Koleksi</span>
+                        <strong id="stat-koleksi-buku">0 Buku</strong>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <div class="stat-info">
+                        <span>Kategori Favorit</span>
+                        <strong id="stat-kategori-favorit">-</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-card">
+                <h3 class="card-title">Pengaturan</h3>
+                <div class="settings-item">
+                    <span>Mode Tampilan</span>
+                    <button id="theme-toggle-btn" class="theme-toggle" aria-label="Ganti Tema">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="profile-card">
+                <h3 class="card-title">Informasi & Bantuan</h3>
+                <div class="info-links-section">
+                    <a href="#" class="info-link" data-modal-target="update-modal"><i class="fas fa-bell"></i><span>Pembaruan Konten</span><i class="fas fa-chevron-right"></i></a>
+                    <a href="#" class="info-link" data-modal-target="panduan-modal"><i class="fas fa-question-circle"></i><span>Panduan & FAQ</span><i class="fas fa-chevron-right"></i></a>
+                    <a href="#" class="info-link" data-modal-target="bantuan-modal"><i class="fas fa-life-ring"></i><span>Pusat Bantuan</span><i class="fas fa-chevron-right"></i></a>
+                    <a href="#" class="info-link" data-modal-target="sosmed-modal"><i class="fas fa-thumbs-up"></i><span>Ikuti Kami</span><i class="fas fa-chevron-right"></i></a>
+                     <a href="#" class="info-link" data-modal-target="toko-modal"><i class="fas fa-store"></i><span>Toko Lainnya</span><i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            <div class="app-version"><p>Koleksi eBook v1.5.1</p></div>
+        </div>
+        
+        <nav id="bottom-navigation">
+            <a href="#" class="nav-item active" data-target="beranda"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#" class="nav-item" data-target="koleksi"><i class="fas fa-bookmark"></i><span>Koleksi</span></a>
+            <a href="#" id="nav-search-btn" data-target="cari"><i class="fas fa-magnifying-glass"></i></a>
+            <a href="#" class="nav-item" data-target="menu"><i class="fas fa-bars"></i><span>Menu</span></a>
+            <a href="#" class="nav-item" data-target="profil"><i class="fas fa-user"></i><span>Profil</span></a>
+        </nav>
+    </div>
+    
+    <div id="menu-bottom-sheet" class="bottom-sheet">
+        <div class="sheet-content">
+            <div class="sheet-header">
+                <button class="back-sheet-btn hidden"><i class="fas fa-arrow-left"></i></button>
+                <h4 id="sheet-title">Menu</h4>
+                <button class="close-sheet-btn">&times;</button>
+            </div>
+            <div class="sheet-body" id="sheet-body"></div>
+        </div>
+    </div>
+
+    <div id="toast-notification" class="toast hidden">
+        <div id="toast-icon"></div>
+        <p id="toast-message"></p>
+    </div>
+    
+    <div class="modal-collection">
+        <div class="fullscreen-modal" id="update-modal">
+             <div class="modal-content">
+                <div class="modal-header">
+                    <button class="modal-back-btn" data-close-button><i class="fas fa-arrow-left"></i></button>
+                    <h3>Pembaruan Konten</h3>
+                </div>
+                <div class="modal-body" id="update-modal-body"></div>
+            </div>
+        </div>
+        <div class="fullscreen-modal" id="search-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="modal-back-btn" data-close-button><i class="fas fa-arrow-left"></i></button>
+                    <div class="header-search-input">
+                         <i class="fas fa-search"></i>
+                         <input type="text" id="search-input" placeholder="Ketik judul buku...">
+                    </div>
+                </div>
+                <div class="modal-body" id="search-modal-body">
+                    <div id="search-results-container" class="search-view-hidden"></div>
+                    <div id="search-default-content" class="search-view-visible"></div>
+                </div>
+            </div>
+        </div>
+        <div class="fullscreen-modal" id="ebook-detail-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="modal-back-btn" data-close-button><i class="fas fa-arrow-left"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ebook-detail-layout">
+                        <div class="ebook-detail-header">
+                            <img src="" alt="Cover Buku" id="detail-cover" class="detail-cover">
+                            <div class="detail-info">
+                                <h3 id="detail-title">Judul Buku</h3>
+                                <p id="detail-author">Nama Penulis</p>
+                                <div class="detail-rating" id="detail-rating"></div>
+                            </div>
+                        </div>
+                        <div class="detail-actions">
+                            <a href="#" id="detail-read-btn" class="read-now-btn">Baca Sekarang</a>
+                            <button class="favorite-btn" id="favorite-btn" aria-label="Tambah ke favorit"><i class="fa-regular fa-bookmark"></i></button>
+                        </div>
+                        <div class="detail-specs">
+                            <div><span>Halaman</span><strong id="detail-pages">0</strong></div>
+                            <div><span>Bahasa</span><strong id="detail-language">N/A</strong></div>
+                            <div><span>Penerbit</span><strong id="detail-publisher">N/A</strong></div>
+                            <div><span>Terbit</span><strong id="detail-publishedDate">N/A</strong></div>
+                        </div>
+                        <div class="detail-synopsis-section">
+                            <h4>Sinopsis</h4>
+                            <p id="detail-synopsis">Sinopsis buku akan muncul di sini.</p>
+                        </div>
+                        <div class="relevant-books-section" id="relevant-books-section">
+                            <h4>Mungkin Anda Suka</h4>
+                            <div class="relevant-books-grid" id="relevant-books-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fullscreen-modal" id="toko-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="modal-back-btn" data-close-button><i class="fas fa-arrow-left"></i></button>
+                    <h3>Toko Online</h3>
+                </div>
+                <div class="modal-body centered-content">
+                    <p>Temukan produk digital lainnya hanya di Lynk.id</p>
+                    <a href="https://lynk.id" target="_blank" class="modal-button">Kunjungi Lynk.id</a>
+                </div>
+            </div>
+        </div>
+        <div class="fullscreen-modal" id="sosmed-modal">
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <button class="modal-back-btn" data-close-button><i class="fas fa-arrow-left"></i></button>
+                    <h3>Ikuti Kami</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="social-links">
+                        <a href="https://tiktok.com" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fullscreen-modal" id="bantuan-modal">
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <button class="modal-back-btn" data-close-button><i class="fas fa-arrow-left"></i></button>
+                    <h3>Pusat Bantuan</h3>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-description">Hubungi kami jika Anda memerlukan bantuan.</p>
+                    <div class="social-links">
+                        <a href="https://wa.me/6281234567890" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a href="mailto:support@ebook.com"><i class="fas fa-envelope"></i> Email</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fullscreen-modal" id="panduan-modal">
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <button class="modal-back-btn" data-close-button><i class="fas fa-arrow-left"></i></button>
+                    <h3>Panduan & FAQ</h3>
+                </div>
+                <div class="modal-body">
+                     <div class="faq-container">
+                        <details><summary>Bagaimana cara membeli eBook?</summary><div><p>Anda dapat membeli eBook melalui halaman detail buku dan mengklik tombol "Beli Sekarang". Anda akan diarahkan ke halaman pembayaran yang aman.</p></div></details>
+                        <details><summary>Metode pembayaran apa saja yang diterima?</summary><div><p>Kami menerima pembayaran melalui transfer bank, kartu kredit, dan dompet digital (GoPay, OVO, DANA).</p></div></details>
+                        <details><summary>Bagaimana saya mengakses eBook setelah membeli?</summary><div><p>Setelah pembayaran berhasil, eBook akan otomatis tersedia di perpustakaan digital Anda di menu "Koleksi Saya" dan dapat langsung dibaca.</p></div></details>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
